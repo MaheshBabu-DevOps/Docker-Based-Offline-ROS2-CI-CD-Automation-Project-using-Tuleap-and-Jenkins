@@ -18,6 +18,7 @@ Linux is a free and open-source Unix-like operating system kernel created by Lin
 Linux distribution is an operating system that is made up of a collection of software based on Linux kernel or you can say distribution contains the Linux kernel and supporting libraries and software
 
 #Example:-
+------------------------------------------------------------------------------------------------------------
 | Family     | Description                          | Examples                                             |
 |------------|--------------------------------------|------------------------------------------------------|
 | Debian     | Stable, community-driven             | Debian, Ubuntu, Linux Mint, Kali Linux               |
@@ -25,7 +26,7 @@ Linux distribution is an operating system that is made up of a collection of sof
 | Arch       | Rolling release, minimal base        | Arch Linux, Manjaro, EndeavourOS                     |
 | SUSE       | European enterprise distros          | openSUSE (Tumbleweed/Leap), SUSE Linux Enterprise    |
 | Slackware  | One of the oldest, highly customizable| Slackware, Salix OS                                 |
-
+-----------------------------------------------------------------------------------------------------------
 							
 #🧠 Architecture of Linux
 
@@ -152,13 +153,13 @@ Accessible on port 5000
 #🔁 Summary Flow
 Dockerfile  ➜  docker build  ➜  docker push  ➜  docker run
 Source code    Create image     Share image     Run container
-
+-----------------------------------------------------------------------------
 | Step  | Command                             | Result                       |
 | ----- | ----------------------------------- | ---------------------------- |
 | Build | `docker build -t flask-app .`       | Creates image with app       |
 | Share | `docker push yourrepo/flask-app`    | Uploads to Docker Hub        |
 | Run   | `docker run -p 5000:5000 flask-app` | App live at `localhost:5000` |
-
+-----------------------------------------------------------------------------
 
 
 
