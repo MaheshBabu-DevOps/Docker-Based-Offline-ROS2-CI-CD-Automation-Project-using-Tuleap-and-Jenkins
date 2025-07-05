@@ -10,7 +10,7 @@ ssl_certificate         /etc/nginx/certs/jenkins.crt.pem;
 ssl_certificate_key     /etc/nginx/certs/jenkins.key.pem;
 ssl_trusted_certificate /etc/nginx/certs/internal-ca.crt.pem;
 
-..........................................................................................................................................
+............................................................................................................................................
 
 #process
 
