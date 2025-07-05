@@ -1,0 +1,52 @@
+version: '3.8'		# Docker Compose file format version
+
+services:		# Define the containers to run
+  jenkins:		# Jenkins service container
+    image: jenkins/jenkins:lts-jdk17		# Use Jenkins LTS with Java 17
+    hostname: jenkins    # Short hostname	# Sets internal hostname of the container
+    container_name: jenkins			# Assigns a custom name to the container
+    user: root					 # Runs container as root user (⚠️ not recommended in production)
+    volumes:			# Mount host paths or named volumes into the container
+      - jenkins_home:/var/jenkins_home		# Persistent Jenkins data storage
+      - /var/run/docker.sock:/var/run/docker.sock  # Security risk! Only use in trusted environments.
+      - /usr/bin/docker:/usr/bin/docker		  # Docker CLI access inside Jenkins
+      - /srv/jenkins/jenkins-ssl-setup/certs:/var/jenkins_home/ssl	# Mount SSL certificates for Jenkins
+      - /srv/jenkins/jenkins-ssl-setup/ca-certificates/jenkins-ca.crt:/etc/ssl/certs/jenkins-ca.crt	# Trusted CA cert
+#      - /srv/jenkins/jenkins-ssl-setup/tuleap.crt:/etc/ssl/certs/tuleap.crt	# Tuleap cert for trust
+      - /srv/jenkins/jenkins-ssl-setup/entrypoint.sh:/entrypoint.sh		# Custom startup script for Jenkins
+    environment:		# Set environment variables for the container
+      - JENKINS_HOME=/var/jenkins_home	# Set Jenkins home directory
+      - JENKINS_OPTS=--httpPort=8080 --httpsPort=-1  # Disable Jenkins HTTPS (handled by NGINX)
+    entrypoint: /entrypoint.sh			# Custom script to run at container startup
+    networks:	# Define which networks the container will join
+      - jenkins-network		# Attach container to custom Docker network
+    restart: unless-stopped	# Auto-restart unless the container is manually stopped
+
+
+  nginx:		# Defines the NGINX reverse proxy service
+    image: nginx:latest		# Use the latest official NGINX image
+    container_name: jenkins-nginx	 # Custom name for the NGINX contain
+    ports:
+      - "80:80"			# Map HTTP port 80 (host:container)
+      - "443:443"		 # Map HTTPS port 443 (host:container)
+    volumes:
+    volumes:
+      - /srv/jenkins/jenkins-ssl-setup/nginx/jenkins.conf:/etc/nginx/conf.d/default.conf		# NGINX site config
+      - /srv/jenkins/jenkins-ssl-setup/certs:/etc/nginx/certs		# SSL cert/key folder
+      - /srv/jenkins/jenkins-ssl-setup/ca-certificates/jenkins-ca.crt:/usr/local/share/ca-certificates/jenkins-ca.crt	# Trusted CA cert
+      - /srv/jenkins/jenkins-ssl-setup/nginx-entrypoint.sh:/etc/nginx/nginx-entrypoint.sh	# Custom entrypoint script
+    depends_on:
+      - jenkins		# Ensure Jenkins starts before NGINX
+    entrypoint: /etc/nginx/nginx-entrypoint.sh		# Override default entrypoint with custom script
+    networks:
+      jenkins-network:		# Connect to defined Docker network
+        aliases:
+          - jenkins.isrd.cair.drdo	# Network alias (DNS) for internal access
+    restart: unless-stopped		# Restart container unless explicitly stopped
+
+volumes:
+  jenkins_home:		# Named volume for Jenkins persistent data
+
+networks:
+  jenkins-network:
+    driver: bridge	# Use default Docker bridge networking
