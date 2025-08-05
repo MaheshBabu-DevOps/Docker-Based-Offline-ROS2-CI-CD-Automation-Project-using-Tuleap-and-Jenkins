@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  tuleap:
+    image: tuleap/tuleap-community-edition:latest
+    hostname: ${TULEAP_FQDN}
+    container_name: tuleap
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+      - "22:22"
+    volumes:
+      - tuleap-data:/data
+      - /srv/tuleap/tuleap-ssl-setup/certs:/etc/pki/undercloud-certs
+      - /srv/tuleap/tuleap-ssl-setup/nginx:/etc/nginx/conf.d
+      - /srv/tuleap/tuleap-ssl-setup/ca-trust:/etc/pki/ca-trust/source/anchors
+    depends_on:
+      - db
+      - redis
+    environment:
+      - TULEAP_FQDN=${TULEAP_FQDN}
+      - TULEAP_SYS_DBHOST=${TULEAP_SYS_DBHOST}
+      - TULEAP_SYS_DBPASSWD=${TULEAP_SYS_DBPASSWD}
+      - SITE_ADMINISTRATOR_PASSWORD=${SITE_ADMINISTRATOR_PASSWORD}
+      - DB_ADMIN_USER=root
+      - DB_ADMIN_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - TULEAP_SYS_EMAIL_ADMIN=${TULEAP_SYS_EMAIL_ADMIN}
+      - TULEAP_EMAIL_TRANSPORT=${TULEAP_EMAIL_TRANSPORT}
+      - TULEAP_FPM_SESSION_MODE=${TULEAP_FPM_SESSION_MODE}
+      - TULEAP_REDIS_SERVER=${TULEAP_REDIS_SERVER}
+      - TULEAP_REDIS_PORT=${TULEAP_REDIS_PORT}
+      - TULEAP_REDIS_PASSWORD=${TULEAP_REDIS_PASSWORD}
+      - TULEAP_REDIS_USE_TLS=${TULEAP_REDIS_USE_TLS}
+    networks:
+      - shared-network
+
+  db:
+    image: mysql:8.0
+    container_name: tuleap_db
+    restart: always
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--sql-mode=NO_ENGINE_SUBSTITUTION"]
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - shared-network
+
+  redis:
+    image: redis:latest
+    container_name: tuleap_redis
+    restart: always
+    command: redis-server --requirepass ${TULEAP_REDIS_PASSWORD}
+    volumes:
+      - redis-data:/data
+    networks:
+      - shared-network
+
+volumes:
+  tuleap-data:
+  db-data:
+  redis-data:
+
+networks:
+  shared-network:
+    driver: bridge

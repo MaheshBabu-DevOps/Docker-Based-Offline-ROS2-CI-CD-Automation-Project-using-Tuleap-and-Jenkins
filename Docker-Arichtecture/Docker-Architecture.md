@@ -1,3 +1,4 @@
+					 
 					  🧱 Real-World Docker Architecture on Linux (Ubuntu)
 					
 							
@@ -51,8 +52,8 @@ Hardware → Linux Kernel (manages CPU, memory, filesystem, network, security) �
 							
 		
 		
-================================================================================================================================================											
-							         *DOCKER*
+==================================================================================================================================================================================											
+							         **DOCKER**
 	
 #What is Docker
 Docker is a containerization platform that allows developers to (build, ship, and run) applications within lightweight, portable containers. It's used to package applications and their dependencies into these containers, which ensure the application can run consistently across different environments. 
@@ -103,13 +104,13 @@ CMD ["python", "app.py"]
 
 3.  Build and Run
 docker build -t flask-app .
-docker run -p 5000:5000 flask-app
+docker run -d --name flask_container -p 5000:5000 flask-app
 
 4. Access
 👉 http://localhost:5000
 
 
-#indetail
+#in detail
 ✅ 1. Build
 You create a Docker image — like packaging your app and its environment.
 
@@ -153,24 +154,25 @@ Accessible on port 5000
 #🔁 Summary Flow
 Dockerfile  ➜  docker build  ➜  docker push  ➜  docker run
 Source code    Create image     Share image     Run container
------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 | Step  | Command                             | Result                       |
 | ----- | ----------------------------------- | ---------------------------- |
 | Build | `docker build -t flask-app .`       | Creates image with app       |
 | Share | `docker push yourrepo/flask-app`    | Uploads to Docker Hub        |
 | Run   | `docker run -p 5000:5000 flask-app` | App live at `localhost:5000` |
------------------------------------------------------------------------------
+------------------------------------------------------------------------------
 
 
 
 #How many ways to build a Docker image?
+---------------------------------------------------------------------
 | Method                 | Description                              |
 | ---------------------- | ---------------------------------------- |
 | `Dockerfile`           | Declarative build instructions           |
 | `docker commit`        | Snapshot of modified running container   |
 | `BuildKit`             | Faster builds with cache and parallelism |
 | `docker-compose build` | Builds multi-container app using YAML    |
-
+---------------------------------------------------------------------
 
 #What is docker-compose-tool
 Docker Compose is a tool for defining and managing multi-container Docker applications. It allows users to define their application's services, networks, and volumes in a single YAML file (typically named docker-compose.yml). With a single command, users can then create and start all the services defined in the docker-compose.yml file.. 
@@ -180,6 +182,8 @@ Docker Compose runs multiple containers together using one file — like launchi
 --🧪 Example: Start Python + MySQL + Redis with docker-compose up from a YAML file.
 
 
+									
+=======================================================================================================================================================================									
 									
 							🧱Docker Architecture	
 							
@@ -370,7 +374,7 @@ Ubuntu OS & Hardware: The base operating system and physical hardware beneath ev
 
 			
 #Components
-
+--------------------------------------------------------------------------------------------------------------------------
 | Component             | Role                                                                                           |
 | --------------------- | ---------------------------------------------------------------------------------------------- |
 | **Docker Client**     | CLI/API that sends commands to Docker Daemon (`dockerd`).                                      |
@@ -382,11 +386,12 @@ Ubuntu OS & Hardware: The base operating system and physical hardware beneath ev
 | **Volumes**           | Persistent storage areas for containers to save data beyond container lifecycle.               |
 | **Docker Registry**   | Stores and distributes Docker images (e.g., Docker Hub).                                       |
 | **Docker Network**    | Manages container communication and connectivity.                                              |
-				
+--------------------------------------------------------------------------------------------------------------------------				
 				
 				
 
 #🔍 Core Difference
+----------------------------------------------------------------------------------------------------------------------
 | Feature            | **Docker (Containers)**                          | **VMware (VMs)**                           |
 | ------------------ | ------------------------------------------------ | ------------------------------------------ |
 | **Architecture**   | Shares host OS kernel                            | Has full guest OS with its own kernel      |
@@ -398,7 +403,7 @@ Ubuntu OS & Hardware: The base operating system and physical hardware beneath ev
 | **Use Case**       | Microservices, CI/CD, fast deployment            | Full OS testing, legacy app support        |
 | **Security**       | Weaker isolation (depends on host kernel)        | Stronger isolation (separate OS)           |
 | **Portability**    | Very high (same image runs anywhere with Docker) | Lower (relies on hypervisor compatibility) |
-
+----------------------------------------------------------------------------------------------------------------------
 
 🧱 Analogy
 Docker = Apartment in a building (share walls/resources)
@@ -412,7 +417,7 @@ Docker runs on top of Linux and relies on powerful Linux kernel features to crea
 
 
 #💡 Key Linux Kernel Features Docker Uses:
-
+------------------------------------------------------------------------------------------------------------------------------
 | Linux Feature               | Description                                      | Analogy                                   |
 | --------------------------- | ------------------------------------------------ | ----------------------------------------- |
 | **Namespaces**              | Isolates processes, filesystems, users, networks | Each container lives in its own apartment |
@@ -423,7 +428,7 @@ Docker runs on top of Linux and relies on powerful Linux kernel features to crea
 | **AppArmor/SELinux**        | Mandatory access control                         | Security guards for each process          |
 | **network namespaces**      | Virtual NICs per container                       | Own WiFi routers per apartment            |
 | **device mapper/overlay2**  | Efficient image storage                          | Smart storage lockers                     |
-
+------------------------------------------------------------------------------------------------------------------------------
 
 
 #🧠 Simplified Flow of How Docker Uses Linux Internals
@@ -461,9 +466,161 @@ Uses UnionFS → image layering
 --A new container runs a bash shell inside its own isolated Linux environment!
 
 
-=================================================================================================================================================
+==============================================================================================================================================================================================
+			                                    ***Docker-Commands***
 
 
+#✅ 1. Docker System Info Commands
+docker version                 # Show Docker client and server version
+docker info                    # Detailed system-wide info (containers, images, storage driver, etc.)
+docker system df              # Show disk usage by images, containers, volumes
+docker system events          # Real-time event stream from Docker daemon
+docker system info            # Same as 'docker info'
+
+
+#✅ 2. Docker Image Management Commandsdocker images                            # List all images
+docker images                         # List all images
+docker pull <image:tag>               # Download image from registry
+docker push <image:tag>               # Upload image to registry
+docker tag <image_id> repo/img:tag    # Tag an image
+docker rmi <image>                    # Remove image
+docker image prune                    # Remove unused images
+docker save -o file.tar <image>       # Save image to tar
+docker load -i file.tar               # Load image from tar
+docker inspect <image>                # Show image details
+docker history <image>                # Show image layers
+
+
+#✅ 3. Docker Container Management Commands
+docker ps -a                          # List all containers
+docker start <container>              # Start container
+docker stop <container>               # Stop container
+docker restart <container>            # Restart container
+docker kill <container>               # Force kill container
+docker run -it ubuntu bash            # Run interactive container
+docker run -d -p 80:80 nginx          # Run detached with port mapping
+docker exec -it <container> bash      # Execute command in container
+docker logs <container>               # View container logs
+docker inspect <container>            # Show container details
+docker top <container>                # Show running processes
+docker rm <container>                 # Remove stopped container
+docker container prune                # Remove all stopped containers
+
+
+#✅ 4. Docker Network Commands
+docker network ls                     # List networks
+docker network create mynet           # Create network
+docker network inspect mynet          # Inspect network
+docker network connect mynet <cont>   # Connect container
+docker network disconnect mynet <cont> # Disconnect container
+docker network rm mynet               # Remove network
+docker network prune                  # Remove unused networks
+
+#✅ 5. Docker Volume Commands
+docker volume ls                      # List volumes
+docker volume create myvol            # Create volume
+docker volume inspect myvol           # Inspect volume
+docker volume rm myvol                # Remove volume
+docker volume prune                   # Remove unused volumes
+# Usage:
+docker run -v myvol:/data ubuntu      # Mount volume
+
+
+# Example: Mount volume to container
+docker run -v myvol:/data ubuntu         # Use volume inside container
+
+
+#✅ 6. Docker Compose Commands (docker-compose or docker compose)
+docker compose up -d                  # Start services detached
+docker compose down                   # Stop and remove services
+docker compose build                  # Rebuild services
+docker compose ps                     # List services
+docker compose logs                   # View service logs
+docker compose restart                # Restart services
+docker compose exec <service> bash    # Enter service container
+docker compose config                 # Validate compose file
+
+
+#✅ 7. Docker Prune Commands (Clean up)
+docker system prune           # Basic cleanup
+docker system prune -a        # Aggressive cleanup
+docker image prune            # Remove unused images
+docker container prune        # Remove stopped containers
+docker volume prune           # Remove unused volumes
+docker network prune          # Remove unused networks
+
+
+
+#docker rmi -f $(docker images -q)  # Force remove ALL images
+
+
+
+#✅ Offline image of registry:
+./download-frozen-image-v2.sh ./registry/docker registry
+tar -cC ./registry/docker . -f registry.tar
+docker load -i registry.tar
+
+
+#✅ 1. Run the Docker Registry (Offline)
+docker run -d \
+  --name registry \
+  -p 5000:5000 \
+  -v /data/docker-registry:/var/lib/registry \
+  registry
+
+
+#✅ 2. Tag and Push an Image to Local Registry
+docker tag nginx:latest localhost:5000/nginx
+docker push localhost:5000/nginx
+
+
+#✅ 3. Pull From Local Registry
+docker pull localhost:5000/nginx
+
+
+
+#✅ 4. List All Images in Local Registry (Optional Script)
+curl http://localhost:5000/v2/_catalog
+curl http://localhost:5000/v2/nginx/tags/list
+
+
+#✅ 5. Delete Image from Local Registry (Manual & Advanced)
+# Get digest first
+curl -s http://localhost:5000/v2/nginx/manifests/latest \
+  -H "Accept: application/vnd.docker.distribution.manifest.v2+json" \
+  | jq -r .config.digest
+
+# Then delete by digest
+curl -X DELETE http://localhost:5000/v2/nginx/manifests/<digest>
+
+
+
+#✅ 6. Clean Up Registry Storage
+docker exec registry registry garbage-collect /etc/docker/registry/config.yml
+
+
+#✅ 7. Stop and Remove Registry
+docker stop registry
+docker rm registry
+
+
+#✅ Run Registry with Delete Enabled
+docker run -d \
+  --name registry \
+  -e REGISTRY_STORAGE_DELETE_ENABLED=true \
+  -p 5000:5000 \
+  -v /data/docker-registry:/var/lib/registry \
+  registry
+  
+  
+  
+
+
+
+
+
+
+=====================================================================================================================================================================================================================
 
 					✅ Step-by-Step Flow: Running Tuleap & Jenkins in Docker on Ubuntu
 					
@@ -543,13 +700,13 @@ docker run jenkins → CLI sends → “Hey dockerd, please run the Jenkins imag
 
 
 5. Docker Daemon Uses containerd + runc to Launch Container
-
+---------------------------------------------------------------
 | Component      | Role                                       |
 | -------------- | ------------------------------------------ |
 | **dockerd**    | Receives your command and delegates work   |
 | **containerd** | Pulls image, prepares filesystem & config  |
 | **runc**       | Creates isolated container using Linux     |
-	
+---------------------------------------------------------------	
 		
 #Detailed Flow:
 
