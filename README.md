@@ -85,12 +85,13 @@ docker compose up -d
 
 
 #3. Access Services
+-------------------------------------------------------------------------------------
 | Service  | URL                                                                     |
 | -------- | ----------------------------------------------------------------------- |
-| Tuleap   | [https://tuleap.isrd.cair.drdo](https://tuleap.example.com)          |
-| Jenkins  | [https://jenkins.isrd.cair.drdo](https://jenkins.example.com)        |
+| Tuleap   | [https://tuleap.isrd.cair.drdo](https://tuleap.example.com)             |
+| Jenkins  | [https://jenkins.isrd.cair.drdo](https://jenkins.example.com)           |
 | Registry | [http://localhost:5000/v2/\_catalog](http://localhost:5000/v2/_catalog) |
-
+--------------------------------------------------------------------------------------
 
 
 #✨ Features
