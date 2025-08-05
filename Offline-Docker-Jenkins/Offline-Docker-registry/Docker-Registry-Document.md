@@ -191,7 +191,7 @@ Access logs
 
 Audit trails
 
-Resource monitoring (e.g., storage usage)
+Resource monitoring (e.g. storage usage)
 
 
 
