@@ -4,6 +4,8 @@ The following diagram illustrates the complete CI-CD pipeline for the offline Do
 
 ![ROS2 CI/CD Workflow](./deepseek_mermaid_20250601_ef03d8.png)
 
+![ROS2 CI/CD Workflow](./deepseek_mermaid_20250601_c20cf7.png)
+
 
 -----
 
