@@ -2,7 +2,7 @@
 
 The following diagram illustrates the complete CI-CD pipeline for the offline Docker-based ROS2 automation setup using Tuleap and Jenkins:
 
-![ROS2 CI/CD Workflow](./CICI-Pipeline.png)
+![ROS2 CI/CD Workflow](./ROS-CICD-Pipeline.png)
 ![ROS2 CI/CD Workflow](./Jenkins-CICD-Workflow.png)
 
 
