@@ -108,10 +108,10 @@ docker compose up -d
 
 
 
-🔗 Connect with Me
-💼 LinkedIn
+## 🔗 Connect with Me
 
-🛠️ GitHub
+- 💼 [LinkedIn](https://linkedin.com/in/maheshbabu-devops)
+- 🛠️ [GitHub](https://github.com/MaheshBabu-DevOps)
 
 
 #✅ This project demonstrates secure, modular CI/CD automation for ROS2 development inside disconnected, containerized infrastructure — ideal for defense labs, research institutes, and enterprise robotics.
