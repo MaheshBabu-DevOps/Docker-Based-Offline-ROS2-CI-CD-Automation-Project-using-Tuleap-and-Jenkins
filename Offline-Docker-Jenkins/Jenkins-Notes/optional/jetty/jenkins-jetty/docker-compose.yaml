@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  jenkins:
+    image: jenkins/jenkins:lts-jdk17
+    hostname: jenkins
+    container_name: jenkins
+    user: root
+    ports:
+      - "443:443"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+      - /srv/jenkins/jenkins-ssl-setup/tuleap.crt:/etc/ssl/certs/tuleap.crt
+      - /srv/jenkins/jenkins-ssl-setup/ca-certificates/jenkins-ca.crt:/etc/ssl/certs/jenkins-ca.crt
+      - /srv/jenkins/jenkins-ssl-setup/certs/jenkins_keystore.jks:/var/jenkins_home/jenkins_keystore.jks
+      - /srv/jenkins/jenkins-ssl-setup/entrypoint.sh:/entrypoint.sh
+    environment:
+      - JENKINS_HOME=/var/jenkins_home
+      - JENKINS_OPTS=--httpPort=-1 --httpsPort=443 --httpsKeyStore=/var/jenkins_home/jenkins_keystore.jks --httpsKeyStorePassword=changeit
+    entrypoint: /entrypoint.sh
+    networks:
+      - jenkins-network
+    restart: unless-stopped
+
+volumes:
+  jenkins_home:
+
+networks:
+  jenkins-network:
+    driver: bridge
